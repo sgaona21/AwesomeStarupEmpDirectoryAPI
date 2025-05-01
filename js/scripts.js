@@ -1,7 +1,7 @@
 function getUsersTESTER() {
     fetch('https://randomuser.me/api/?results=12')
     .then(response => response.json())
-    .then(users => console.log(users.results[0].location.state))
+    .then(users => console.log(users.results[0]))
 }
 
 getUsersTESTER()
@@ -9,12 +9,21 @@ getUsersTESTER()
 const galleryContainer = document.getElementById('gallery');
 
 
+// function getUsers() {
+//     fetch('https://randomuser.me/api/?results=12')
+//     .then(response => response.json())
+//     .then(data => displayUsers(data))
+// }
 
-
-function getUsers() {
-    fetch('https://randomuser.me/api/?results=12')
-    .then(response => response.json())
-    .then(data => displayUsers(data))
+async function getUsers() {
+    try {
+        let response = await fetch('https://randomuser.me/api/?results=12');
+        let users = await response.json();
+        displayUsers(users)
+    } catch (error) {
+        console.log(error);
+        alert("Failed to load employee data (Sorry)");
+    }
 }
 
 function displayUsers(users) {
@@ -27,7 +36,7 @@ function displayUsers(users) {
 
     let cardThumbnail = document.createElement('img');
     cardThumbnail.classList.add('card-img');
-    cardThumbnail.src = users.results[i].picture.thumbnail
+    cardThumbnail.src = users.results[i].picture.large
 
     cardThumbnailContainer.appendChild(cardThumbnail);
     employeeCard.appendChild(cardThumbnailContainer);
@@ -54,6 +63,7 @@ function displayUsers(users) {
     cardLocation.textContent = `${users.results[i].location.city}, ${users.results[i].location.state}`;
     cardInfoContainer.appendChild(cardLocation);
     }
+
 }
 
 getUsers();
