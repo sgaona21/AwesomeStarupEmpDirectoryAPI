@@ -27,9 +27,9 @@ function displayUsers(users) {
         let cardThumbnail = createNewElement('img', ['card-img']);
         cardThumbnail.src = users.results[i].picture.large;
         let cardInfoContainer = createNewElement('div', ['card-info-container']);
-        let cardNameH3 = createNewElement('h3', ['card-name', 'cap', 'name']);
+        let cardNameH3 = createNewElement('h3', ['card-name', 'cap'], 'name');
         cardNameH3.textContent = `${users.results[i].name.first} ${users.results[i].name.last}`;    
-        let cardEmail = createNewElement('p', 'card-text');
+        let cardEmail = createNewElement('p', ['card-text']);
         cardEmail.textContent = users.results[i].email;
         let cardLocation = createNewElement('p', ['card-text', 'cap']);
         cardLocation.textContent = `${users.results[i].location.city}, ${users.results[i].location.state}`;
@@ -42,7 +42,7 @@ function displayUsers(users) {
 }
 
 //Helper Functions 
-function createNewElement(elementType, classNames = [], id = null) {
+function createNewElement(elementType, classNames = [], id) {
     let newElement = document.createElement(elementType);
     newElement.classList.add(...classNames);
     newElement.id = id;
