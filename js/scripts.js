@@ -1,5 +1,5 @@
 function getUsersTESTER() {
-    fetch('https://randomuser.me/api/?results=12')
+    fetch('https://randomuser.me/api/?nat=us&results=12')
     .then(response => response.json())
     .then(employees => console.log(employees.results[0]))
 }
@@ -7,15 +7,17 @@ function getUsersTESTER() {
 getUsersTESTER()
 
 const galleryContainer = document.getElementById('gallery');
+let searchBar = document.getElementById('search-input');
 
-let employeeData = null;
+let employeeData = [];
 
 async function getEmployees() {
     try {
-        let response = await fetch('https://randomuser.me/api/?results=12');
+        let response = await fetch('https://randomuser.me/api/?nat=us&results=12');
         let employees = await response.json();
         employeeData = employees.results;
-        displayUserCards(employees)
+        displayUserCards(employees);
+        attachSearchFeature();
         attachCardListeners();
     } catch (error) {
         console.log(error);
@@ -82,18 +84,16 @@ function displayEmployeeModal(employeeIndex) {
     modalInfoContainer.append(modalImage, modalName, modalEmail, modalCity, hr, modalPhone, modalAddress, modalBirthday);
     modal.append(modalCloseButton, modalInfoContainer);
     modalContainer.appendChild(modal);
-    galleryContainer.appendChild(modalContainer)
+    galleryContainer.appendChild(modalContainer);
 
-    
-
+    modalCloseButton.addEventListener('click', () => {
+        modalContainer.remove()
+    })
 }
 
 
 
 
-
-
-//Helper Functions 
 function createNewElement(elementType, classNames = [], id) {
     let newElement = document.createElement(elementType);
     newElement.classList.add(...classNames);
@@ -103,25 +103,30 @@ function createNewElement(elementType, classNames = [], id) {
 }
 
 
-
-
-// galleryContainer.addEventListener('click', (e) => {
-//     const card = e.target.closest('.card');
-//     if (card) {
-//         console.log('HEYYYY lol')
-//     }
-// })
-
 function attachCardListeners() {
     galleryContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
         if (card) {
             let empIndex = card.dataset.index;
-            console.log(empIndex)
-            displayEmployeeModal(empIndex)
+            console.log(empIndex);
+            displayEmployeeModal(empIndex);
         }
     })
 }
 
+function attachSearchFeature() {
+    searchBar.addEventListener('input', () => {
+        let currentInput = searchBar.value.toLowerCase();
+        let allChildren = galleryContainer.children;
+        for (let i = 0; i < allChildren.length; i++) {
+            let child = allChildren[i].querySelector('h3');
+            if (!child.textContent.toLowerCase().includes(currentInput)) {
+                allChildren[i].style.display = 'none';
+            } else {
+                allChildren[i].style.display = 'flex';
+            }
+        }
+    })
+}
 
 getEmployees();
