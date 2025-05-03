@@ -9,6 +9,7 @@ getUsersTESTER()
 const galleryContainer = document.getElementById('gallery');
 let searchBar = document.getElementById('search-input');
 let employeeData = [];
+let empIndex = null;
 
 async function getEmployees() {
     try {
@@ -96,6 +97,16 @@ function displayEmployeeModal(employeeIndex) {
     modalCloseButton.addEventListener('click', () => {
         modalContainer.remove();
     })
+
+    previousButton.addEventListener('click', () => {
+        modalContainer.remove();
+        toggleBack();
+    });
+    
+    nextButton.addEventListener('click', () => {
+        modalContainer.remove();
+        toggleForward();
+    });
 }
 
 function createNewElement(elementType, classNames = [], id) {
@@ -110,7 +121,7 @@ function attachCardListeners() {
     galleryContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
         if (card) {
-            let empIndex = card.dataset.index;
+            empIndex = Number(card.dataset.index);
             displayEmployeeModal(empIndex);
         }
     })
@@ -129,6 +140,20 @@ function attachSearchFeature() {
             }
         }
     })
+}
+
+function toggleBack() {
+    if (empIndex > 0 && empIndex < 12) {
+        empIndex--
+    }
+    displayEmployeeModal(empIndex);
+}
+
+function toggleForward() {
+    if (empIndex >= 0 && empIndex < 11) {
+        empIndex++
+    }
+    displayEmployeeModal(empIndex);
 }
 
 getEmployees();
