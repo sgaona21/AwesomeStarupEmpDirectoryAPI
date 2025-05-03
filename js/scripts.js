@@ -50,7 +50,8 @@ function displayEmployeeModal(employeeIndex) {
     let modalContainer = createNewElement('div', ['modal-container']);
     let modal = createNewElement('div', ['modal']);
     let modalCloseButton = createNewElement('button', ['modal-close-btn'], 'modal-close-btn');
-    let strongX = createNewElement('strong');
+    modalCloseButton.type = 'button';
+    let strongX = document.createElement('strong');
     strongX.textContent = 'X';
     let modalInfoContainer = createNewElement('div', ['modal-info-container']);
     let modalImage = createNewElement('img', ['modal-img']);
@@ -77,14 +78,23 @@ function displayEmployeeModal(employeeIndex) {
       });
     modalBirthday.textContent = 'Birthday: ' + formattedBirthday;
 
+    let modalButtonContainer = createNewElement('div', ['modal-btn-container']);
+    let previousButton = createNewElement('button', ['modal-prev', 'btn'], 'modal-prev');
+    previousButton.type = 'button';
+    previousButton.textContent = 'Prev';
+    let nextButton = createNewElement('button', ['modal-next', 'btn'], 'modal-next');
+    nextButton.type = 'button';
+    nextButton.textContent = 'Next';
+
+    modalButtonContainer.append(previousButton, nextButton);
     modalCloseButton.appendChild(strongX);
     modalInfoContainer.append(modalImage, modalName, modalEmail, modalCity, hr, modalPhone, modalAddress, modalBirthday);
     modal.append(modalCloseButton, modalInfoContainer);
-    modalContainer.appendChild(modal);
+    modalContainer.append(modal, modalButtonContainer);
     galleryContainer.appendChild(modalContainer);
 
     modalCloseButton.addEventListener('click', () => {
-        modalContainer.remove()
+        modalContainer.remove();
     })
 }
 
