@@ -1,14 +1,14 @@
 const galleryContainer = document.getElementById('gallery');
 let searchBar = document.getElementById('search-input');
-let employeeData = [];
-let empIndex = null;
+let employeeData = []; // I created this variable to store the data from the API 
+let empIndex = null; // this variable creates a state for each modal. This helps navigate forward and backward between employees
 
 async function getEmployees() {
+    //this function fetches the API data and then calls the helper functions to display content to the page. 
     try {
         let response = await fetch('https://randomuser.me/api/?nat=us&results=12');
         let employees = await response.json();
         employeeData = employees.results;
-        console.log(employeeData)
         displayEmployeeCards(employees);
         attachSearchFeature();
         attachCardListeners();
@@ -19,6 +19,7 @@ async function getEmployees() {
 }
 
 function displayEmployeeCards(employees) {
+    //this function creates a loop to iterate through the employee data and generate the markup for each individual card
     for (let i = 0; i < employees.results.length; i++) {
         let cardContainer = createNewElement('div', ['card']);
         cardContainer.dataset.index = i;
@@ -41,6 +42,7 @@ function displayEmployeeCards(employees) {
 }
 
 function displayEmployeeModal(employeeIndex) {
+    //this function takes the user index as an argument and uses that to generate the markup for the modal information. 
     let modalContainer = createNewElement('div', ['modal-container']);
     let modal = createNewElement('div', ['modal']);
     let modalCloseButton = createNewElement('button', ['modal-close-btn'], 'modal-close-btn');
@@ -87,6 +89,7 @@ function displayEmployeeModal(employeeIndex) {
     modalContainer.append(modal, modalButtonContainer);
     galleryContainer.appendChild(modalContainer);
 
+    //Here i attached the event listeners for the close, previous, and next buttons. this also removes the current modal from the markup to make room for a new one to be displayed.
     modalCloseButton.addEventListener('click', () => {
         modalContainer.remove();
     })
@@ -103,6 +106,7 @@ function displayEmployeeModal(employeeIndex) {
 }
 
 function createNewElement(elementType, classNames = [], id) {
+    //helper function used to create new elements and prevent repeat code
     let newElement = document.createElement(elementType);
     newElement.classList.add(...classNames);
     newElement.id = id;
@@ -111,6 +115,7 @@ function createNewElement(elementType, classNames = [], id) {
 }
 
 function attachCardListeners() {
+    //this functions attaches an event listener to each card and pulls the index from each card. it then feeds that index into the displayEmployeeModal function and calls it. 
     galleryContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
         if (card) {
@@ -121,6 +126,7 @@ function attachCardListeners() {
 }
 
 function attachSearchFeature() {
+    //this function provides the search functionality. it saves the value of the search input and checks each card for a match and hides or displays each corresponding card. 
     searchBar.addEventListener('input', () => {
         let currentInput = searchBar.value.toLowerCase();
         let allChildren = galleryContainer.children;
@@ -135,6 +141,7 @@ function attachSearchFeature() {
     })
 }
 
+//These two toggle functions make sure the index state never goes out of bounds. it then takes the index and uses it as an argument. It then invokes the displayEmployeeModal function.
 function toggleBack() {
     if (empIndex > 0 && empIndex < 12) {
         empIndex--
