@@ -8,7 +8,6 @@ getUsersTESTER()
 
 const galleryContainer = document.getElementById('gallery');
 let searchBar = document.getElementById('search-input');
-
 let employeeData = [];
 
 async function getEmployees() {
@@ -16,7 +15,7 @@ async function getEmployees() {
         let response = await fetch('https://randomuser.me/api/?nat=us&results=12');
         let employees = await response.json();
         employeeData = employees.results;
-        displayUserCards(employees);
+        displayEmployeeCards(employees);
         attachSearchFeature();
         attachCardListeners();
     } catch (error) {
@@ -25,9 +24,7 @@ async function getEmployees() {
     }
 }
 
-
-
-function displayUserCards(employees) {
+function displayEmployeeCards(employees) {
     for (let i = 0; i < employees.results.length; i++) {
         let cardContainer = createNewElement('div', ['card']);
         cardContainer.dataset.index = i;
@@ -91,9 +88,6 @@ function displayEmployeeModal(employeeIndex) {
     })
 }
 
-
-
-
 function createNewElement(elementType, classNames = [], id) {
     let newElement = document.createElement(elementType);
     newElement.classList.add(...classNames);
@@ -102,13 +96,11 @@ function createNewElement(elementType, classNames = [], id) {
     return newElement;
 }
 
-
 function attachCardListeners() {
     galleryContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
         if (card) {
             let empIndex = card.dataset.index;
-            console.log(empIndex);
             displayEmployeeModal(empIndex);
         }
     })
