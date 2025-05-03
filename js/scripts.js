@@ -1,11 +1,3 @@
-function getUsersTESTER() {
-    fetch('https://randomuser.me/api/?nat=us&results=12')
-    .then(response => response.json())
-    .then(employees => console.log(employees.results[0]))
-}
-
-getUsersTESTER()
-
 const galleryContainer = document.getElementById('gallery');
 let searchBar = document.getElementById('search-input');
 let employeeData = [];
