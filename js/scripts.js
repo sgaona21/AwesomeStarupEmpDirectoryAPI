@@ -1,14 +1,14 @@
 function getUsersTESTER() {
     fetch('https://randomuser.me/api/?results=12')
     .then(response => response.json())
-    .then(employees => console.log(employees.results[0].name))
+    .then(employees => console.log(employees.results[0]))
 }
 
 getUsersTESTER()
 
 const galleryContainer = document.getElementById('gallery');
 
-let employeeData = [];
+let employeeData = null;
 
 async function getEmployees() {
     try {
@@ -16,8 +16,7 @@ async function getEmployees() {
         let employees = await response.json();
         employeeData = employees.results;
         displayUserCards(employees)
-        console.log(employeeData)
-        attachClickListeners();
+        attachCardListeners();
     } catch (error) {
         console.log(error);
         alert("Failed to load employee data (Sorry)");
@@ -48,7 +47,44 @@ function displayUserCards(employees) {
     }
 }
 
-function displayEmployeeModal(data) {
+function displayEmployeeModal(employeeIndex) {
+    let modalContainer = createNewElement('div', ['modal-container']);
+    let modal = createNewElement('div', ['modal']);
+    let modalCloseButton = createNewElement('button', ['modal-close-btn'], 'modal-close-btn');
+    let strongX = createNewElement('strong');
+    strongX.textContent = 'X';
+    let modalInfoContainer = createNewElement('div', ['modal-info-container']);
+    let modalImage = createNewElement('img', ['modal-img']);
+    modalImage.src = employeeData[employeeIndex].picture.large;
+    modalImage.alt = 'profile picture';
+    let modalName = createNewElement('h3', ['modal-name'], 'name');
+    modalName.textContent = `${employeeData[employeeIndex].name.first} ${employeeData[employeeIndex].name.last}`
+    let modalEmail = createNewElement('p', ['modal-text']);
+    modalEmail.textContent = employeeData[employeeIndex].email;
+    let modalCity = createNewElement('p', ['modal-text']);
+    modalCity.textContent = employeeData[employeeIndex].location.city;
+    let hr = document.createElement('hr');
+    let modalPhone = createNewElement('p', ['modal-text']);
+    modalPhone.textContent = employeeData[employeeIndex].phone;
+    let modalAddress = createNewElement('p', ['modal-text']);
+    modalAddress.textContent = `${employeeData[employeeIndex].location.street.number} ${employeeData[employeeIndex].location.street.name}, ${employeeData[employeeIndex].location.city}, ${employeeData[employeeIndex].location.state}, ${employeeData[employeeIndex].location.postcode}`
+    let modalBirthday = createNewElement('p', ['modal-text']);
+    let employeeBirthday = employeeData[employeeIndex].dob.date;
+    let bday = new Date(employeeBirthday);
+    let formattedBirthday = bday.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    modalBirthday.textContent = 'Birthday: ' + formattedBirthday;
+
+    modalCloseButton.appendChild(strongX);
+    modalInfoContainer.append(modalImage, modalName, modalEmail, modalCity, hr, modalPhone, modalAddress, modalBirthday);
+    modal.append(modalCloseButton, modalInfoContainer);
+    modalContainer.appendChild(modal);
+    galleryContainer.appendChild(modalContainer)
+
+    
 
 }
 
@@ -76,12 +112,13 @@ function createNewElement(elementType, classNames = [], id) {
 //     }
 // })
 
-function attachClickListeners() {
+function attachCardListeners() {
     galleryContainer.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
         if (card) {
-            console.log(card)
-            
+            let empIndex = card.dataset.index;
+            console.log(empIndex)
+            displayEmployeeModal(empIndex)
         }
     })
 }
