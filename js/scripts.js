@@ -8,6 +8,7 @@ async function getEmployees() {
         let response = await fetch('https://randomuser.me/api/?nat=us&results=12');
         let employees = await response.json();
         employeeData = employees.results;
+        console.log(employeeData)
         displayEmployeeCards(employees);
         attachSearchFeature();
         attachCardListeners();
@@ -58,7 +59,7 @@ function displayEmployeeModal(employeeIndex) {
     modalCity.textContent = employeeData[employeeIndex].location.city;
     let hr = document.createElement('hr');
     let modalPhone = createNewElement('p', ['modal-text']);
-    modalPhone.textContent = employeeData[employeeIndex].phone;
+    modalPhone.textContent = employeeData[employeeIndex].cell;
     let modalAddress = createNewElement('p', ['modal-text']);
     modalAddress.textContent = `${employeeData[employeeIndex].location.street.number} ${employeeData[employeeIndex].location.street.name}, ${employeeData[employeeIndex].location.city}, ${employeeData[employeeIndex].location.state}, ${employeeData[employeeIndex].location.postcode}`
     let modalBirthday = createNewElement('p', ['modal-text']);
